@@ -10,7 +10,10 @@
       </form>
       <ul>
         <transition-group name="list" enter-active-class="animated bounceInUp" leave-active-class="animated bounceOutDown">
-          <li v-for="(data, index) in skills" :key='index'>{{ index + 1 }}. {{ data.skill }}</li>
+          <li v-for="(data, index) in skills" :key='index'>
+            {{ data.skill }}
+            <i class="fa fa-minus-circle" v-on:click="remove(index)"></i>
+          </li>
         </transition-group>
       </ul>
       <!-- <p v-if="skills.length >=3">You have at least 3 skills</p>
@@ -56,8 +59,11 @@
               }
             })
             // console.log(this.checked)
+          },
+          remove(id) {
+            this.skills.splice(id, 1);
           }
-        }
+    }
   }
 </script>
 
