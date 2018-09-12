@@ -2,7 +2,9 @@
   <div class="hello">
     <div class="holder">
       <form @submit.prevent="addSkill">
-        <input type="text" placeholder="Enter a skill you have.." v-model="skill">
+        <input type="text" placeholder="Enter a skill you have.." v-model="skill" v-validate=" 'min:5'" name="skill">
+        <p class="alert" v-if="errors.has('skill')">{{ errors.first('skill') }}</p>
+        <!-- <input type="checkbox" id="checkbox" v-model="checked"> -->
       </form>
       <ul>
         <li v-for="(data, index) in skills" :key='index'>{{ index + 1 }}. {{ data.skill }}</li>
@@ -29,6 +31,7 @@ export default {
         { "skill": "Developer" },
         { "skill": "Rock, paper, scissors" }
       ],
+      // checked: false,
       // showAlert: true,
       // showClass: true,
       // alertObject: {
@@ -41,8 +44,15 @@ export default {
   },
   methods: {
         addSkill() {
-          this.skills.push ({ skill: this.skill })
-          this.skill = "";
+          this.$validator.validateAll().then((result) => {
+            if(result) {
+              this.skills.push ({ skill: this.skill })
+              this.skill = "";
+            } else {
+              console.log('Not valid')
+            }
+          })
+          // console.log(this.checked)
         }
       }
 }
@@ -104,5 +114,18 @@ input {
   font-size: 1.3em;
   background-color: #323333;
   color: #687F7F;
+}
+.alert {
+    background: #fdf2ce;
+    font-weight: bold;
+    display: inline-block;
+    padding: 5px;
+    margin-top: -20px;
+}
+.alert-in-enter-active {
+  animation: bounce-in .5s;
+}
+.alert-in-leave-active {
+  animation: bounce-in .5s reverse;
 }
 </style>
